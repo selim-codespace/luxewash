@@ -31,7 +31,7 @@ export function HowItWorks() {
       <div className="container relative z-10">
         <div className="text-center mb-20">
           <RevealText tag="h2" className="text-4xl md:text-5xl font-display text-white mb-6 justify-center flex gap-3">
-            Effortless <span className="text-gold italic">Brilliance</span>
+            Effortless Brilliance
           </RevealText>
           <FadeIn direction="up" delay={0.2}>
             <p className="text-text-secondary mx-auto max-w-xl">

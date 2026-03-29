@@ -5,7 +5,7 @@ import { db } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
 
 export const {
-  handlers: { GET, POST },
+  handlers,
   auth,
   signIn,
   signOut,

@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 
 const prismaClientSingleton = () => {
   const client = new PrismaClient()
-  
-  // Soft delete middleware
-  client.$use(async (params, next) => {
+
+  // Soft-delete middleware
+  client.$use(async (params: Prisma.MiddlewareParams, next: (params: Prisma.MiddlewareParams) => Promise<any>) => {
     // Models with soft-delete implementation
     const softDeleteModels = ['User', 'Car', 'Booking']
     

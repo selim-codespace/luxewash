@@ -1,7 +1,7 @@
 'use client'
 
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, Float, EnvironmentProps, PerspectiveCamera } from '@react-three/drei'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { Suspense, useRef, useState, useEffect } from 'react'
 import * as THREE from 'three'
 
@@ -33,18 +33,18 @@ function CarModel() {
 }
 
 function CursorFollower() {
-  const { viewport, mouse, camera } = useFrame((state) => state)
+  const { viewport } = useThree()
   const rigRef = useRef<THREE.Group>(null)
 
   useFrame((state, delta) => {
     if (rigRef.current) {
       // Smoothly look at cursor
-      const targetX = (state.mouse.x * viewport.width) / 4
-      const targetY = (state.mouse.y * viewport.height) / 4
+      const targetX = (state.pointer.x * viewport.width) / 4
+      const targetY = (state.pointer.y * viewport.height) / 4
       rigRef.current.position.x = THREE.MathUtils.lerp(rigRef.current.position.x, targetX, 0.05)
       rigRef.current.position.y = THREE.MathUtils.lerp(rigRef.current.position.y, targetY, 0.05)
-      rigRef.current.rotation.y = THREE.MathUtils.lerp(rigRef.current.rotation.y, state.mouse.x * 0.2, 0.05)
-      rigRef.current.rotation.x = THREE.MathUtils.lerp(rigRef.current.rotation.x, -state.mouse.y * 0.2, 0.05)
+      rigRef.current.rotation.y = THREE.MathUtils.lerp(rigRef.current.rotation.y, state.pointer.x * 0.2, 0.05)
+      rigRef.current.rotation.x = THREE.MathUtils.lerp(rigRef.current.rotation.x, -state.pointer.y * 0.2, 0.05)
     }
   })
 

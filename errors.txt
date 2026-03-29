@@ -1,0 +1,15 @@
+app/api/auth/[...nextauth]/route.ts(1,10): error TS2305: Module '"@/lib/auth"' has no exported member 'handlers'.
+components/3d/hero-car-scene.tsx(36,11): error TS2339: Property 'viewport' does not exist on type 'null'.
+components/3d/hero-car-scene.tsx(36,21): error TS2339: Property 'mouse' does not exist on type 'null'.
+components/3d/hero-car-scene.tsx(36,28): error TS2339: Property 'camera' does not exist on type 'null'.
+components/sections/home/ai-teaser.tsx(35,27): error TS2322: Type 'Element' is not assignable to type 'string'.
+components/sections/home/hero-section.tsx(25,24): error TS2322: Type 'Element' is not assignable to type 'string'.
+components/sections/home/how-it-works.tsx(34,24): error TS2322: Type 'Element' is not assignable to type 'string'.
+components/sections/home/services-showcase.tsx(37,26): error TS2322: Type 'Element' is not assignable to type 'string'.
+lib/db.ts(1,10): error TS2305: Module '"@prisma/client"' has no exported member 'PrismaClient'.
+lib/db.ts(7,22): error TS7006: Parameter 'params' implicitly has an 'any' type.
+lib/db.ts(7,30): error TS7006: Parameter 'next' implicitly has an 'any' type.
+lib/storage.ts(2,30): error TS2307: Cannot find module '@aws-sdk/s3-request-presigner' or its corresponding type declarations.
+lib/stripe.ts(8,3): error TS2322: Type '"2025-02-24.acacia"' is not assignable to type '"2026-03-25.dahlia"'.
+prisma/seed.ts(1,10): error TS2305: Module '"@prisma/client"' has no exported member 'PrismaClient'.
+prisma/seed.ts(1,24): error TS2305: Module '"@prisma/client"' has no exported member 'Prisma'.

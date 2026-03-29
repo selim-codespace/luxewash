@@ -31,8 +31,8 @@ export function AiTeaser() {
       
       <div className="container relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
-          <RevealText tag="h2" className="text-4xl md:text-5xl font-display text-white mb-6">
-            Not sure what <br /> you need?
+          <RevealText tag="h2" className="text-4xl md:text-5xl font-display text-white mb-6 whitespace-pre-line">
+            {"Not sure what\nyou need?"}
           </RevealText>
           <FadeIn direction="up" delay={0.2}>
             <p className="text-text-secondary text-lg mb-8">

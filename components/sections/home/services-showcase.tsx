@@ -33,8 +33,8 @@ export function ServicesShowcase() {
   return (
     <div className="bg-obsidian w-full -mt-px relative z-10">
       <div className="container pt-32 pb-16">
-        <RevealText tag="h2" className="text-4xl md:text-6xl font-display text-white mb-6">
-          Uncompromising <br /> Quality
+        <RevealText tag="h2" className="text-4xl md:text-6xl font-display text-white mb-6 whitespace-pre-line">
+          {"Uncompromising\nQuality"}
         </RevealText>
         <p className="text-text-secondary max-w-xl text-lg mb-12">
           Select from our curated packages or customize your own. Every service is performed with meticulous attention to detail at your location.

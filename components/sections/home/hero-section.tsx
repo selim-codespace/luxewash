@@ -21,8 +21,8 @@ export function HeroSection() {
             </span>
           </FadeIn>
           
-          <RevealText tag="h1" className="text-6xl md:text-7xl lg:text-8xl font-display font-medium leading-[0.9] text-white tracking-tight mb-8">
-            Perfection <br/> Delivered.
+          <RevealText tag="h1" className="text-6xl md:text-7xl lg:text-8xl font-display font-medium leading-[0.9] text-white tracking-tight mb-8 whitespace-pre-line">
+            {"Perfection\nDelivered."}
           </RevealText>
           
           <FadeIn delay={0.8} direction="up">
