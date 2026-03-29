@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { signOut, useSession } from 'next-auth/react'
+import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { 
   LayoutDashboard, 
   CalendarDays, 
@@ -73,6 +74,10 @@ export function AdminSidebar() {
       </div>
 
       <div className="space-y-2 border-t border-white/10 pt-6">
+        <div className="flex items-center justify-between px-4 py-2.5">
+          <span className="text-sm font-medium text-text-secondary">Theme</span>
+          <ThemeToggle />
+        </div>
         <Link 
           href="/settings"
           className="flex items-center gap-3 px-4 py-2.5 rounded-sm text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors w-full"

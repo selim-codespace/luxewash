@@ -7,6 +7,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/layout/theme-toggle'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -85,6 +86,7 @@ export function Navbar() {
             >
               Sign In
             </Link>
+            <ThemeToggle />
             <Link
               href="/booking"
               className="px-6 py-2.5 bg-white text-void font-semibold text-sm hover:bg-gold transition-colors"
@@ -94,13 +96,16 @@ export function Navbar() {
           </div>
 
           {/* Mobile Toggle */}
-          <button
-            className="md:hidden text-white p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle Menu"
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center md:hidden gap-4">
+            <ThemeToggle />
+            <button
+              className="text-white p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle Menu"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </header>
 

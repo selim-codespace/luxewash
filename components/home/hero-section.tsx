@@ -44,13 +44,13 @@ export function HeroSection() {
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-gold tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-4"
+              className="text-primary tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-4"
             >
               The New Standard In Mobile Detailing
             </motion.p>
           </div>
           
-          <h1 className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[7vw] leading-[0.9] font-display font-medium text-white tracking-tighter mix-blend-difference mb-8">
+          <h1 className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[7vw] leading-[0.9] font-display font-medium text-text-primary tracking-tighter mix-blend-difference mb-8">
             <TextReveal delay={0.2}>
               Precision.
             </TextReveal>
@@ -81,10 +81,10 @@ export function HeroSection() {
             </Button>
           </Link>
           <Link href="#services" className="group flex items-center gap-4 h-16 opacity-70 hover:opacity-100 transition-opacity">
-            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold transition-colors">
-              <ChevronRight size={18} className="text-white group-hover:text-gold group-hover:translate-x-1 transition-all" />
+            <div className="w-12 h-12 rounded-full border border-text-primary/20 flex items-center justify-center group-hover:border-primary transition-colors">
+              <ChevronRight size={18} className="text-text-primary group-hover:text-primary group-hover:translate-x-1 transition-all" />
             </div>
-            <span className="text-sm uppercase tracking-widest text-white font-medium group-hover:text-gold transition-colors">
+            <span className="text-sm uppercase tracking-widest text-text-primary font-medium group-hover:text-primary transition-colors">
               Explore Packages
             </span>
           </Link>

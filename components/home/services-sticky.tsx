@@ -27,7 +27,7 @@ const packages = [
     description: 'Advanced protection with our signature ceramic sealant and deep interior shampoo.',
     icon: Shield,
     color: 'bg-graphite',
-    border: 'border-gold/30',
+    border: 'border-primary/30',
     popular: true,
     features: [
       'Everything in Standard',
@@ -66,8 +66,8 @@ export function ServicesSticky() {
   return (
     <section ref={containerRef} id="services" className="relative py-32 bg-void" style={{ minHeight: '200vh' }}>
       <motion.div style={{ opacity, y }} className="sticky top-32 z-10 text-center max-w-4xl mx-auto mb-20 px-6">
-        <h2 className="text-5xl md:text-7xl font-display text-white mb-6 headline tracking-tighter">
-          Uncompromising <span className="text-gold italic">Packages</span>
+        <h2 className="text-5xl md:text-7xl font-display text-text-primary mb-6 headline tracking-tighter">
+          Uncompromising <span className="text-primary italic">Packages</span>
         </h2>
         <p className="text-xl text-text-secondary font-light">
           Certified techniques. Microscopic precision. Scroll to explore our tiers.
@@ -93,25 +93,25 @@ export function ServicesSticky() {
                 }}
               >
                 {pkg.popular && (
-                  <div className="absolute top-0 right-0 bg-gold text-void px-6 py-2 rounded-bl-3xl font-bold uppercase tracking-widest text-xs z-10">
+                  <div className="absolute top-0 right-0 bg-primary text-void px-6 py-2 rounded-bl-3xl font-bold uppercase tracking-widest text-xs z-10">
                     Most Popular
                   </div>
                 )}
                 
                 {/* Large Background Watermark Icon */}
-                <Icon className="absolute -bottom-10 -right-10 w-96 h-96 text-white/[0.02] pointer-events-none" />
+                <Icon className="absolute -bottom-10 -right-10 w-96 h-96 text-text-primary/[0.02] pointer-events-none" />
 
                 <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
                   <div>
-                    <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 text-gold">
+                    <div className="w-16 h-16 rounded-2xl bg-text-primary/5 border border-text-primary/10 flex items-center justify-center mb-8 text-primary">
                       <Icon size={32} />
                     </div>
-                    <h3 className="text-4xl font-display text-white mb-4">{pkg.title}</h3>
+                    <h3 className="text-4xl font-display text-text-primary mb-4">{pkg.title}</h3>
                     <p className="text-lg text-text-secondary mb-8 leading-relaxed">
                       {pkg.description}
                     </p>
                     <div className="flex items-end gap-2 mb-8">
-                      <span className="text-5xl font-mono text-white tracking-tighter">{pkg.price}</span>
+                      <span className="text-5xl font-mono text-text-primary tracking-tighter">{pkg.price}</span>
                       <span className="text-text-tertiary uppercase tracking-widest text-sm mb-2">/ vehicle</span>
                     </div>
                     <Link href={`/booking?package=${pkg.title}`}>
@@ -122,11 +122,11 @@ export function ServicesSticky() {
                   </div>
                   
                   <div className="flex flex-col justify-center space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-white/50 mb-2">Includes</h4>
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-text-primary/50 mb-2">Includes</h4>
                     {pkg.features.map((feature, fIdx) => (
                       <div key={fIdx} className="flex items-start gap-4">
-                        <CheckCircle2 size={24} className="text-gold shrink-0 bg-gold/10 rounded-full p-1" />
-                        <span className="text-lg text-white font-light">{feature}</span>
+                        <CheckCircle2 size={24} className="text-primary shrink-0 bg-primary/10 rounded-full p-1" />
+                        <span className="text-lg text-text-primary font-light">{feature}</span>
                       </div>
                     ))}
                   </div>

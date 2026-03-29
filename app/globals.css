@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #050507;
-  --color-obsidian: #0d0d12;
-  --color-graphite: #1a1a24;
-  --color-smoke: #2e2e3e;
-  --color-gold: #c9a84c;
-  --color-gold-muted: #8a6e34;
-  --color-gold-text: #d4b65c;
-  --color-text-primary: #f5f5f0;
-  --color-text-secondary: #a0a0b0;
-  --color-text-tertiary: #5a5a70;
-  --color-text-inverse: #050507;
+  --color-void: var(--void);
+  --color-obsidian: var(--obsidian);
+  --color-graphite: var(--graphite);
+  --color-smoke: var(--smoke);
+  --color-primary: var(--primary);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-text: var(--primary-text);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-inverse: var(--text-inverse);
   
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -19,6 +19,19 @@
 }
 
 :root {
+  /* Light Theme Colors */
+  --void: #ffffff;
+  --obsidian: #f8f9fa;
+  --graphite: #e9ecef;
+  --smoke: #dee2e6;
+  --primary: #2563eb; /* Azure Blue */
+  --primary-muted: #60a5fa;
+  --primary-text: #1d4ed8;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --text-inverse: #ffffff;
+  
   /* Spacing Scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -33,21 +46,21 @@
   --space-11: 12rem;
 
   /* Surfaces & Borders */
-  --surface-0: var(--color-void);
-  --surface-1: var(--color-obsidian);
-  --surface-2: var(--color-graphite);
-  --surface-3: var(--color-smoke);
-  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
-  --border-default: 1px solid rgba(255, 255, 255, 0.1);
-  --border-strong: 1px solid rgba(255, 255, 255, 0.15);
-  --border-gold: 1px solid rgba(201, 168, 76, 0.3);
-  --border-focus: 2px solid var(--color-gold);
+  --surface-0: var(--void);
+  --surface-1: var(--obsidian);
+  --surface-2: var(--graphite);
+  --surface-3: var(--smoke);
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+  --border-default: 1px solid rgba(0, 0, 0, 0.1);
+  --border-strong: 1px solid rgba(0, 0, 0, 0.15);
+  --border-primary: 1px solid rgba(37, 99, 235, 0.3);
+  --border-focus: 2px solid var(--primary);
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 40px rgba(201, 168, 76, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.2);
 
   /* Motion */
   --duration-fast: 200ms;
@@ -55,6 +68,33 @@
   --duration-slow: 500ms;
   --duration-cinematic: 1000ms;
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark {
+  /* Dark Theme Colors */
+  --void: #050507;
+  --obsidian: #0d0d12;
+  --graphite: #1a1a24;
+  --smoke: #2e2e3e;
+  --primary: #3b82f6; /* Lighter Azure Blue */
+  --primary-muted: #1e3a8a;
+  --primary-text: #60a5fa;
+  --text-primary: #f5f5f0;
+  --text-secondary: #a0a0b0;
+  --text-tertiary: #5a5a70;
+  --text-inverse: #050507;
+
+  /* Surfaces & Borders override for Dark Mode */
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+  --border-default: 1px solid rgba(255, 255, 255, 0.1);
+  --border-strong: 1px solid rgba(255, 255, 255, 0.15);
+  --border-primary: 1px solid rgba(59, 130, 246, 0.3);
+
+  /* Shadows overide for Dark Mode */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {

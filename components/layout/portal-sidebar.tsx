@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { signOut, useSession } from 'next-auth/react'
+import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { 
   LayoutDashboard, 
   CalendarCheck, 
@@ -62,6 +63,10 @@ export function PortalSidebar() {
       </div>
 
       <div>
+        <div className="flex items-center justify-between mb-4 px-4">
+          <span className="text-sm font-medium text-text-secondary">Theme</span>
+          <ThemeToggle />
+        </div>
         <button 
           onClick={() => signOut({ callbackUrl: '/' })}
           className="flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-medium text-red-400 hover:bg-red-400/10 transition-colors w-full text-left"

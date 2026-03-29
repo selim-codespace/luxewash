@@ -51,8 +51,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn(playfair.variable, dmSans.variable, jetbrainsMono.variable)}>
-      <body className="antialiased font-body bg-void text-text-primary">
+    <html lang="en" suppressHydrationWarning className={cn(playfair.variable, dmSans.variable, jetbrainsMono.variable)}>
+      <body className="antialiased font-body bg-void text-text-primary transition-colors duration-300">
         <div className="grain" />
         <Providers>
           <CustomCursor />
