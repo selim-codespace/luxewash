@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_USE_NETLIFY_EDGE = "false"
+
+# Cache Prisma binaries between builds
+[build.processing]
+  skip_processing = false
