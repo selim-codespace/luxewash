@@ -1,0 +1,486 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USER ────────────────────────────────────────────────────
+
+model User {
+  id                String       @id @default(cuid())
+  email             String       @unique
+  phone             String?
+  name              String
+  passwordHash      String?      // null for OAuth-only users
+  role              Role         @default(CUSTOMER)
+  avatarUrl         String?
+  loyaltyTier       LoyaltyTier  @default(BRONZE)
+  loyaltyPoints     Int          @default(0)
+  referralCode      String       @unique @default(cuid())
+  referredById      String?
+  stripeCustomerId  String?      @unique
+  refreshTokenHash  String?      // for token rotation verification
+  deletedAt         DateTime?    // soft-delete
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  // Relations
+  referredBy        User?          @relation("Referrals", fields: [referredById], references: [id])
+  referrals         User[]         @relation("Referrals")
+  cars              Car[]
+  bookings          Booking[]
+  reviews           Review[]
+  notifications     Notification[]
+  loyaltyEvents     LoyaltyEvent[]
+  subscriptions     Subscription[]
+  addresses         Address[]
+  staff             Staff?         // back-relation
+
+  @@index([email])
+  @@index([role])
+  @@index([loyaltyTier])
+  @@index([deletedAt])
+}
+
+// ─── CAR ─────────────────────────────────────────────────────
+
+model Car {
+  id           String    @id @default(cuid())
+  userId       String
+  make         String
+  model        String
+  year         Int
+  color        String
+  licensePlate String?
+  size         CarSize   @default(SEDAN)
+  avatarIcon   String?   // selected car icon identifier
+  deletedAt    DateTime? // soft-delete
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user         User      @relation(fields: [userId], references: [id])
+  bookings     Booking[]
+
+  @@index([userId])
+}
+
+// ─── SERVICE ─────────────────────────────────────────────────
+
+model Service {
+  id              String           @id @default(cuid())
+  name            String
+  slug            String           @unique
+  description     String
+  longDescription String?
+  basePrice       Decimal          @db.Decimal(10, 2)
+  duration        Int              // minutes
+  isActive        Boolean          @default(true)
+  sortOrder       Int              @default(0)
+  imageUrl        String?
+  videoUrl        String?
+  features        String[]         // included feature bullets
+  category        ServiceCategory
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  pricingRules    ServicePricing[]
+  addons          Addon[]
+  bookingServices BookingService[]
+
+  @@index([category])
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model ServicePricing {
+  id        String  @id @default(cuid())
+  serviceId String
+  carSize   CarSize
+  price     Decimal @db.Decimal(10, 2)
+
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, carSize])
+}
+
+// ─── ADDON ───────────────────────────────────────────────────
+
+model Addon {
+  id              String           @id @default(cuid())
+  serviceId       String?          // null = available for all services
+  name            String
+  description     String?
+  price           Decimal          @db.Decimal(10, 2)
+  duration        Int              @default(0) // additional minutes
+  isActive        Boolean          @default(true)
+  sortOrder       Int              @default(0)
+
+  service         Service?         @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  bookingServices BookingService[]
+
+  @@index([serviceId])
+  @@index([isActive])
+}
+
+// ─── BOOKING ─────────────────────────────────────────────────
+
+model Booking {
+  id                    String           @id @default(cuid())
+  userId                String
+  carId                 String
+  status                BookingStatus    @default(PENDING)
+  scheduledAt           DateTime
+  completedAt           DateTime?
+  address               String
+  lat                   Float?
+  lng                   Float?
+  notes                 String?          // customer notes
+  totalPrice            Decimal          @db.Decimal(10, 2)
+  depositAmount         Decimal?         @db.Decimal(10, 2)
+  isPaid                Boolean          @default(false)
+  stripePaymentIntentId String?          @unique
+  technicianId          String?
+  promoCodeId           String?
+  loyaltyPointsUsed     Int              @default(0)
+  loyaltyPointsEarned   Int              @default(0)
+  cancellationReason    String?
+  internalNotes         String?          // admin/tech notes
+  deletedAt             DateTime?        // soft-delete
+
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  user                  User             @relation(fields: [userId], references: [id])
+  car                   Car              @relation(fields: [carId], references: [id])
+  technician            Staff?           @relation(fields: [technicianId], references: [id])
+  services              BookingService[]
+  photos                BookingPhoto[]
+  review                Review?
+  promoCode             PromoCode?       @relation(fields: [promoCodeId], references: [id])
+
+  @@index([userId])
+  @@index([technicianId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([status, scheduledAt]) // composite: "upcoming confirmed bookings"
+  @@index([userId, status])      // composite: "my pending bookings"
+  @@index([deletedAt])
+}
+
+// ─── BOOKING SERVICE (join table) ────────────────────────────
+
+model BookingService {
+  id        String  @id @default(cuid())
+  bookingId String
+  serviceId String
+  addonId   String? // if this line item is an addon
+  price     Decimal @db.Decimal(10, 2) // price at time of booking (snapshot)
+  quantity  Int     @default(1)
+
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id])
+  addon     Addon?  @relation(fields: [addonId], references: [id])
+
+  @@index([bookingId])
+}
+
+// ─── BOOKING PHOTO ───────────────────────────────────────────
+
+model BookingPhoto {
+  id         String    @id @default(cuid())
+  bookingId  String
+  url        String
+  type       PhotoType // BEFORE, AFTER, CUSTOMER_UPLOAD, INSPECTION
+  caption    String?
+  uploadedBy String?   // user ID of uploader (tech or customer)
+
+  createdAt  DateTime  @default(now())
+
+  booking    Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([type])
+}
+
+// ─── STAFF ───────────────────────────────────────────────────
+
+model Staff {
+  id        String          @id @default(cuid())
+  userId    String          @unique
+  role      StaffRole
+  bio       String?
+  isActive  Boolean         @default(true)
+
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  user      User            @relation(fields: [userId], references: [id])
+  schedules StaffSchedule[]
+  bookings  Booking[]
+
+  @@index([isActive])
+}
+
+// ─── STAFF SCHEDULE ──────────────────────────────────────────
+
+model StaffSchedule {
+  id        String  @id @default(cuid())
+  staffId   String
+  dayOfWeek Int     // 0 = Sunday, 6 = Saturday
+  startTime String  // "09:00" (HH:mm format)
+  endTime   String  // "17:00"
+  isOff     Boolean @default(false) // true = day off override
+
+  staff     Staff   @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@unique([staffId, dayOfWeek])
+  @@index([staffId])
+}
+
+// ─── REVIEW ──────────────────────────────────────────────────
+
+model Review {
+  id             String   @id @default(cuid())
+  bookingId      String   @unique
+  userId         String
+  rating         Int      // 1-5
+  comment        String?
+  adminReply     String?
+  sentimentScore Float?   // -1.0 to 1.0
+  sentimentTags  String[] // e.g., ["speed", "quality", "value"]
+  isPublic       Boolean  @default(true)
+  isFlagged      Boolean  @default(false)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  booking        Booking  @relation(fields: [bookingId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([rating])
+  @@index([isPublic])
+}
+
+// ─── PROMO CODE ──────────────────────────────────────────────
+
+model PromoCode {
+  id           String       @id @default(cuid())
+  code         String       @unique
+  discount     Decimal      @db.Decimal(10, 2)
+  discountType DiscountType
+  maxUses      Int?
+  usedCount    Int          @default(0)
+  expiresAt    DateTime?
+  isActive     Boolean      @default(true)
+  restrictions Json?        // { serviceIds: [], minOrder: 0, carSizes: [] }
+
+  createdAt    DateTime     @default(now())
+
+  bookings     Booking[]
+
+  @@index([code])
+  @@index([isActive])
+}
+
+// ─── SUBSCRIPTION ────────────────────────────────────────────
+
+model SubscriptionPlan {
+  id               String         @id @default(cuid())
+  name             String         // "Silver", "Gold", "Platinum"
+  slug             String         @unique
+  description      String?
+  price            Decimal        @db.Decimal(10, 2) // monthly price
+  billingCycle     BillingCycle   @default(MONTHLY)
+  washesPerMonth   Int?           // null = unlimited
+  includedServices String[]       // service IDs included
+  features         String[]       // feature bullet points
+  stripePriceId    String         @unique
+  isActive         Boolean        @default(true)
+  sortOrder        Int            @default(0)
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  subscriptions    Subscription[]
+
+  @@index([isActive])
+}
+
+model Subscription {
+  id                String             @id @default(cuid())
+  userId            String
+  planId            String
+  status            SubscriptionStatus
+  stripeSubId       String             @unique
+  currentPeriodEnd  DateTime
+  cancelAtPeriodEnd Boolean            @default(false)
+
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  user              User               @relation(fields: [userId], references: [id])
+  plan              SubscriptionPlan   @relation(fields: [planId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ─── LOYALTY ─────────────────────────────────────────────────
+
+model LoyaltyEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  points    Int      // positive = earned, negative = redeemed
+  reason    String   // "booking_completed", "referral_bonus", "redeemed_reward"
+  bookingId String?
+  metadata  Json?    // additional context
+
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([userId, createdAt])
+}
+
+// ─── NOTIFICATION ────────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?            // { bookingId, link, action }
+  isRead    Boolean          @default(false)
+  readAt    DateTime?
+
+  createdAt DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+}
+
+// ─── ADDRESS ─────────────────────────────────────────────────
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  label     String   // "Home", "Office", "Custom"
+  address   String
+  city      String
+  state     String?
+  zipCode   String?
+  lat       Float?
+  lng       Float?
+  isDefault Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────
+
+enum Role {
+  CUSTOMER
+  TECHNICIAN
+  MANAGER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum StaffRole {
+  TECHNICIAN
+  SENIOR_TECHNICIAN
+  MANAGER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  TECHNICIAN_ASSIGNED
+  EN_ROUTE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  REFUNDED
+}
+
+enum CarSize {
+  MOTORCYCLE
+  HATCHBACK
+  SEDAN
+  SUV
+  TRUCK
+  VAN
+}
+
+enum LoyaltyTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
+}
+
+enum ServiceCategory {
+  EXTERIOR
+  INTERIOR
+  FULL_DETAIL
+  SPECIALTY
+  FLEET
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  TRIALING
+  PAUSED
+}
+
+enum PhotoType {
+  BEFORE
+  AFTER
+  CUSTOMER_UPLOAD
+  INSPECTION
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMATION
+  BOOKING_REMINDER
+  BOOKING_STATUS_UPDATE
+  TECHNICIAN_ASSIGNED
+  TECHNICIAN_EN_ROUTE
+  SERVICE_COMPLETED
+  REVIEW_REQUEST
+  LOYALTY_TIER_UPGRADE
+  LOYALTY_POINTS_EARNED
+  PROMO_OFFER
+  SUBSCRIPTION_RENEWAL
+  SYSTEM_ALERT
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
