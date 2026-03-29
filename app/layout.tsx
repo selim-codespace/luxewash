@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import { CustomCursor } from '@/components/layout/custom-cursor'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
 
@@ -53,7 +54,10 @@ export default function RootLayout({
     <html lang="en" className={cn(playfair.variable, dmSans.variable, jetbrainsMono.variable)}>
       <body className="antialiased font-body bg-void text-text-primary">
         <div className="grain" />
-        <Providers>{children}</Providers>
+        <Providers>
+          <CustomCursor />
+          {children}
+        </Providers>
       </body>
     </html>
   )
