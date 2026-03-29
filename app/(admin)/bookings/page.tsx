@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { FadeIn } from '@/components/animations/fade-in'
 import { formatPrice, cn } from '@/lib/utils'
-import { Search, Filter, MoreHorizontal, Download } from 'lucide-react'
+import { Search, Filter, MoreHorizontal, Download, CalendarCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default async function AdminBookingsPage() {
@@ -14,8 +14,8 @@ export default async function AdminBookingsPage() {
   }
 
   const allBookings = await db.booking.findMany({
-    orderBy: { scheduledDate: 'desc' },
-    include: { user: true, service: true }
+    orderBy: { scheduledAt: 'desc' },
+    include: { user: true, services: { include: { service: true } } }
   })
 
   const getStatusColor = (status: string) => {
@@ -87,12 +87,12 @@ export default async function AdminBookingsPage() {
                   </td>
                   <td className="px-6 py-4 text-center">
                     <div className="flex flex-col">
-                      <span className="text-white">{b.scheduledDate.toLocaleDateString()}</span>
-                      <span className="text-xs text-text-tertiary">{b.scheduledTime}</span>
+                      <span className="text-white">{b.scheduledAt.toLocaleDateString()}</span>
+                      <span className="text-xs text-text-tertiary">{b.scheduledAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 truncate max-w-[150px]">{b.service?.name}</td>
-                  <td className="px-6 py-4 text-right font-mono text-gold">{formatPrice(b.totalPrice)}</td>
+                  <td className="px-6 py-4 truncate max-w-[150px]">{b.services[0]?.service.name}</td>
+                  <td className="px-6 py-4 text-right font-mono text-gold">{formatPrice(b.totalPrice.toNumber())}</td>
                   <td className="px-6 py-4 text-center">
                     <span className={cn("text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 border inline-block", getStatusColor(b.status))}>
                       {b.status}

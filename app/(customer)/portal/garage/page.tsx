@@ -57,7 +57,7 @@ export default async function GaragePage() {
                 {/* Visual Header */}
                 <div className="h-32 bg-obsidian relative border-b border-white/5 flex items-center justify-center overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-void to-transparent z-10" />
-                  {car.type === 'TRUCK' || car.type === 'SUV' ? (
+                  {car.size === 'TRUCK' || car.size === 'SUV' || car.size === 'VAN' ? (
                     <Truck className="w-32 h-32 text-white/5 absolute -bottom-4 group-hover:text-gold/10 transition-colors duration-500" />
                   ) : (
                     <CarFront className="w-32 h-32 text-white/5 absolute -bottom-4 group-hover:text-gold/10 transition-colors duration-500" />
@@ -77,7 +77,7 @@ export default async function GaragePage() {
                     </div>
                     <div>
                       <p className="text-[10px] uppercase font-mono tracking-widest text-text-tertiary mb-1">Size Class</p>
-                      <p className="text-white font-medium">{car.type}</p>
+                      <p className="text-white font-medium">{car.size}</p>
                     </div>
                     <div>
                       <p className="text-[10px] uppercase font-mono tracking-widest text-text-tertiary mb-1">Color</p>

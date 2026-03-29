@@ -39,6 +39,8 @@ export default function LoginPage() {
         router.push(callbackUrl)
         router.refresh()
       }
+    } catch (err: unknown) {
+      addToast({ title: 'Authentication Failed', description: 'An unexpected error occurred', type: 'error' })
     } finally {
       setIsLoading(false)
     }

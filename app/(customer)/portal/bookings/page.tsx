@@ -5,6 +5,7 @@ import { FadeIn } from '@/components/animations/fade-in'
 import { formatPrice, cn } from '@/lib/utils'
 import { CalendarCheck, Search } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default async function BookingsPage() {
   const session = await auth()
@@ -15,8 +16,8 @@ export default async function BookingsPage() {
 
   const bookings = await db.booking.findMany({
     where: { userId: session.user.id },
-    include: { service: true },
-    orderBy: { scheduledDate: 'desc' }
+    include: { services: { include: { service: true } } },
+    orderBy: { scheduledAt: 'desc' }
   })
 
   const getStatusColor = (status: string) => {
@@ -64,14 +65,14 @@ export default async function BookingsPage() {
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-3">
                     <h3 className="text-lg font-medium text-white truncate max-w-[200px] sm:max-w-xs block">
-                      {booking.service?.name || 'LuxeWash Package'}
+                      {booking.services[0]?.service.name || 'LuxeWash Package'}
                     </h3>
                     <span className={cn("text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 border", getStatusColor(booking.status))}>
                       {booking.status}
                     </span>
                   </div>
                   <p className="text-text-secondary text-sm">
-                    {booking.scheduledDate.toLocaleDateString()} • {booking.scheduledTime}
+                    {booking.scheduledAt.toLocaleDateString()} • {booking.scheduledAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                   </p>
                   <p className="text-text-tertiary text-xs font-mono uppercase tracking-widest">
                     REF: {booking.id.slice(0,8).toUpperCase()}
@@ -81,7 +82,7 @@ export default async function BookingsPage() {
                 <div className="flex items-center gap-8 md:ml-auto w-full md:w-auto justify-between md:justify-end">
                   <div className="text-left md:text-right">
                     <div className="text-lg font-mono text-gold leading-tight">
-                      {formatPrice(booking.totalPrice)}
+                      {formatPrice(booking.totalPrice.toNumber())}
                     </div>
                     {booking.status === 'COMPLETED' && (
                       <a href="#" className="text-xs text-text-secondary hover:text-white underline underline-offset-4">View Receipt</a>

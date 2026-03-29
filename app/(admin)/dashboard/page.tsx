@@ -19,12 +19,12 @@ export default async function AdminDashboardPage() {
     db.booking.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
-      include: { user: true, service: true }
+      include: { user: true, services: { include: { service: true } } }
     })
   ])
 
   // Fake revenue calculation since we don't have historical data seeded extensively
-  const totalRevenue = recentBookings.reduce((acc, curr) => acc + curr.totalPrice, 0) * 12
+  const totalRevenue = recentBookings.reduce((acc, curr) => acc + curr.totalPrice.toNumber(), 0) * 12
 
   const stats = [
     { label: 'Total Revenue', value: formatPrice(totalRevenue), icon: DollarSign, trend: '+14.5%' },
@@ -87,9 +87,9 @@ export default async function AdminDashboardPage() {
                       </div>
                       {b.user.name || b.user.email}
                     </td>
-                    <td className="px-6 py-4">{b.service?.name}</td>
+                    <td className="px-6 py-4">{b.services[0]?.service.name || 'Unknown'}</td>
                     <td className="px-6 py-4">{b.createdAt.toLocaleDateString()}</td>
-                    <td className="px-6 py-4 text-right font-mono text-gold">{formatPrice(b.totalPrice)}</td>
+                    <td className="px-6 py-4 text-right font-mono text-gold">{formatPrice(b.totalPrice.toNumber())}</td>
                     <td className="px-6 py-4 text-center">
                       <span className="text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 border border-emerald-400/30 text-emerald-400 bg-emerald-400/10 inline-block">
                         {b.status}

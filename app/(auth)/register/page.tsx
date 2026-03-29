@@ -28,8 +28,8 @@ export default function RegisterPage() {
       
       addToast({ title: 'Account Created', description: 'Welcome to LuxeWash. Please sign in.', type: 'success' })
       router.push('/login')
-    } catch (err: any) {
-      addToast({ title: 'Registration Failed', description: err.message, type: 'error' })
+    } catch (err: unknown) {
+      addToast({ title: 'Registration Failed', description: (err as Error).message, type: 'error' })
     } finally {
       setIsLoading(false)
     }

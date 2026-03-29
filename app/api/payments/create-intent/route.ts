@@ -25,8 +25,8 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json({ clientSecret })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[STRIPE_INTENT_ERROR]', error)
-    return new NextResponse(error.message || 'Internal Error', { status: 500 })
+    return new NextResponse((error as Error).message || 'Internal Error', { status: 500 })
   }
 }

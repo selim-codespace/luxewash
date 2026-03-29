@@ -17,9 +17,9 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     )
-  } catch (error: any) {
-    console.error('[WEBHOOK_ERROR]', error.message)
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
+  } catch (error: unknown) {
+    console.error('[WEBHOOK_ERROR]', (error as Error).message)
+    return new NextResponse(`Webhook Error: ${(error as Error).message}`, { status: 400 })
   }
 
   const session = event.data.object as Stripe.PaymentIntent
@@ -37,12 +37,19 @@ export async function POST(req: Request) {
       await db.booking.create({
         data: {
           userId: metadata.customerId,
-          serviceId: metadata.serviceId,
-          scheduledDate: new Date(metadata.scheduledDate),
-          scheduledTime: metadata.scheduledTime,
+          carId: metadata.carId || 'placeholder-car-id', // Assuming carId should be passed or handled
+          scheduledAt: new Date(`${metadata.scheduledDate}T${metadata.scheduledTime}:00`),
           totalPrice: session.amount / 100,
           status: 'CONFIRMED',
-          paymentIntentId: session.id,
+          stripePaymentIntentId: session.id,
+          address: metadata.address || 'Address provided at checkout',
+          services: {
+            create: {
+              serviceId: metadata.serviceId,
+              price: session.amount / 100,
+              quantity: 1
+            }
+          }
           // Other properties would normally be passed via separate metadata sync or retrieved from user session
         }
       })
@@ -50,7 +57,7 @@ export async function POST(req: Request) {
       // Optionally fire confirmation email logic here
       console.log('✅ Booking successfully confirmed and paid:', session.id)
 
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('[WEBHOOK_DB_ERROR]', e)
       return new NextResponse('DB Update Failed', { status: 500 })
     }

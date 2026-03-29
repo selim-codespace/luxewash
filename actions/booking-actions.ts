@@ -19,27 +19,40 @@ export async function getAvailableSlots(dateString: string) {
   // 1. Generate all possible slots
   const allSlots = generateDaySlots()
   
+  const startOfDay = new Date(dateString)
+  startOfDay.setHours(0, 0, 0, 0)
+  
+  const endOfDay = new Date(dateString)
+  endOfDay.setHours(23, 59, 59, 999)
+
   // 2. Fetch existing bookings for this date
   const bookings = await db.booking.findMany({
     where: {
-      scheduledDate: new Date(dateString),
-      status: { notIn: ['CANCELLED'] }
+      scheduledAt: { gte: startOfDay, lte: endOfDay },
+      status: { notIn: ['CANCELLED', 'REFUNDED'] }
     },
     select: {
-      scheduledTime: true
+      scheduledAt: true
     }
   })
 
   // 3. Convert booked times into a Set for fast lookup
-  const bookedSet = new Set(bookings.map(b => b.scheduledTime))
+  const bookedSet = new Set(bookings.map((b) => {
+    const h = b.scheduledAt.getHours().toString().padStart(2, '0')
+    const m = b.scheduledAt.getMinutes().toString().padStart(2, '0')
+    return `${h}:${m}`
+  }))
 
   // 4. Also check Redis for slots that are currently "locked" (in-checkout process)
   // We'll scan keys like "slot_lock:{date}:{time}"
-  const lockedKeysStream = redis.scanIterator({ match: `slot_lock:${dateString}:*` })
+  const stream = redis.scanStream({ match: `slot_lock:${dateString}:*` })
   const lockedSet = new Set<string>()
-  for await (const key of lockedKeysStream) {
-    const time = key.split(':').pop()
-    if (time) lockedSet.add(time)
+  
+  for await (const keys of stream) {
+    for (const key of keys) {
+      const time = key.split(':').pop()
+      if (time) lockedSet.add(time)
+    }
   }
 
   // 5. Filter out booked and locked slots
@@ -87,9 +100,9 @@ export async function createBookingIntent(data: {
     })
 
     return { clientSecret: paymentIntent.client_secret }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to create booking intent', error)
-    throw new Error(error.message || 'Failed to initialize payment')
+    throw new Error((error as Error).message || 'Failed to initialize payment')
   }
 }
 
@@ -107,16 +120,22 @@ export async function confirmBookingInDB(
     const booking = await db.booking.create({
       data: {
         userId: pi.metadata.customerId,
-        serviceId: pi.metadata.serviceId,
-        scheduledDate: new Date(pi.metadata.scheduledDate),
-        scheduledTime: pi.metadata.scheduledTime,
+        carId: bookingData.carId,
+        scheduledAt: new Date(`${pi.metadata.scheduledDate}T${pi.metadata.scheduledTime}:00`),
         totalPrice: pi.amount / 100,
         status: 'CONFIRMED',
-        paymentIntentId: paymentIntentId,
+        stripePaymentIntentId: paymentIntentId,
         address: bookingData.address,
-        locationLat: bookingData.locationLat,
-        locationLng: bookingData.locationLng,
-        instructions: bookingData.instructions,
+        lat: bookingData.locationLat,
+        lng: bookingData.locationLng,
+        notes: bookingData.instructions,
+        services: {
+          create: {
+            serviceId: pi.metadata.serviceId,
+            price: pi.amount / 100,
+            quantity: 1
+          }
+        }
       }
     })
 

@@ -16,8 +16,8 @@ export default async function PortalDashboard() {
   // Fetch data
   const upcomingBooking = await db.booking.findFirst({
     where: { userId: session.user.id, status: 'CONFIRMED' },
-    orderBy: { scheduledDate: 'asc' },
-    include: { service: true }
+    orderBy: { scheduledAt: 'asc' },
+    include: { services: { include: { service: true } } }
   })
 
   return (
@@ -45,10 +45,10 @@ export default async function PortalDashboard() {
               {upcomingBooking ? (
                 <div>
                   <h2 className="text-3xl font-display text-white mb-2">
-                    {upcomingBooking.service?.name || 'LuxeWash Details'}
+                    {upcomingBooking.services[0]?.service.name || 'LuxeWash Details'}
                   </h2>
                   <p className="text-text-secondary mb-8">
-                    {upcomingBooking.scheduledDate.toLocaleDateString()} at {upcomingBooking.scheduledTime}
+                    {upcomingBooking.scheduledAt.toLocaleDateString()} at {upcomingBooking.scheduledAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                   </p>
                   <Link href={`/portal/bookings/${upcomingBooking.id}`}>
                     <Button variant="premium">Manage Booking</Button>
