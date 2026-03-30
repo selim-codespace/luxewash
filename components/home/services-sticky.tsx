@@ -53,7 +53,7 @@ const packages = [
 ]
 
 export function ServicesSticky() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start']

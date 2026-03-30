@@ -33,7 +33,7 @@ const features = [
 ]
 
 export function FeatureMarquee() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   
   const { scrollYProgress } = useScroll({
     target: containerRef,

@@ -105,7 +105,7 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
 }
 
 export function BeforeAfterGallery() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
 
   const { scrollYProgress } = useScroll({

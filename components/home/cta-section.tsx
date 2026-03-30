@@ -8,7 +8,7 @@ import { ArrowRight, Play, Check } from 'lucide-react'
 import Link from 'next/link'
 
 export function CTASection() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

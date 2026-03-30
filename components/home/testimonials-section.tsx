@@ -40,11 +40,11 @@ const testimonials = [
 ]
 
 export function TestimonialsSection() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: containerRef as React.RefObject<HTMLElement>,
     offset: ['start end', 'end start'],
   })
 
