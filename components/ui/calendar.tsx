@@ -22,35 +22,43 @@ function Calendar({
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
+        month_caption: "flex justify-center pt-1 relative items-center mb-4",
         caption_label: "text-sm font-medium text-white font-display uppercase tracking-widest",
-        nav: "space-x-1 flex items-center",
-        nav_button: cn(
+        nav: "flex items-center gap-1",
+        button_previous: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 border-white/10 hover:border-gold hover:text-gold"
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 border-white/10 hover:border-gold hover:text-gold absolute left-1"
         ),
-        nav_button_previous: "absolute left-1",
-        nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
-        head_row: "flex",
-        head_cell: "text-text-tertiary rounded-md w-9 font-mono font-normal text-[0.8rem] uppercase",
-        row: "flex w-full mt-2",
-        cell: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
-        day: cn(
+        button_next: cn(
+          buttonVariants({ variant: "outline" }),
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 border-white/10 hover:border-gold hover:text-gold absolute right-1"
+        ),
+        month_grid: "w-full border-collapse",
+        weekdays: "flex",
+        weekday: "text-text-tertiary rounded-md w-9 font-mono font-normal text-[0.8rem] uppercase",
+        week: "flex w-full mt-2",
+        day: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
+        day_button: cn(
           buttonVariants({ variant: "ghost" }),
           "h-9 w-9 p-0 font-mono font-normal aria-selected:opacity-100 hover:bg-gold/10 hover:text-gold"
         ),
-        day_selected: "bg-gold text-void hover:bg-gold hover:text-void focus:bg-gold focus:text-void",
-        day_today: "bg-white/5 text-white underline underline-offset-4",
-        day_outside: "text-text-tertiary opacity-30",
-        day_disabled: "text-text-tertiary opacity-30",
-        day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
-        day_hidden: "invisible",
+        range_start: "day-range-start",
+        range_end: "day-range-end",
+        selected: "bg-gold text-void hover:bg-gold hover:text-void focus:bg-gold focus:text-void",
+        today: "bg-white/5 text-white underline underline-offset-4",
+        outside: "text-text-tertiary opacity-30",
+        disabled: "text-text-tertiary opacity-30",
+        range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
+        hidden: "invisible",
         ...classNames,
       }}
       components={{
-        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        IconRight: () => <ChevronRight className="h-4 w-4" />,
+        Chevron: ({ orientation }) => {
+          if (orientation === 'left') {
+            return <ChevronLeft className="h-4 w-4" />
+          }
+          return <ChevronRight className="h-4 w-4" />
+        },
       }}
       {...props}
     />
