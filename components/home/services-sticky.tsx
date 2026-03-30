@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { CheckCircle2, Shield, Sparkles, Droplets } from 'lucide-react'
+import { CheckCircle2, Shield, Sparkles, Droplets, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 const packages = [
@@ -12,8 +12,8 @@ const packages = [
     price: '$149',
     description: 'Comprehensive exterior hand wash and interior revitalization for a refreshed look.',
     icon: Droplets,
-    color: 'bg-obsidian',
-    border: 'border-white/5',
+    color: 'from-slate-500/20 to-slate-600/20',
+    border: 'border-white/10',
     features: [
       'Two-bucket hand wash',
       'Wheel & tire cleaning',
@@ -26,8 +26,8 @@ const packages = [
     price: '$299',
     description: 'Advanced protection with our signature ceramic sealant and deep interior shampoo.',
     icon: Shield,
-    color: 'bg-graphite',
-    border: 'border-primary/30',
+    color: 'from-amber-500/20 to-amber-600/20',
+    border: 'border-amber-500/30',
     popular: true,
     features: [
       'Everything in Standard',
@@ -41,8 +41,8 @@ const packages = [
     price: '$599',
     description: 'The ultimate restoration. Multi-stage paint correction and multi-year ceramic coating.',
     icon: Sparkles,
-    color: 'bg-void',
-    border: 'border-white/10',
+    color: 'from-purple-500/20 to-purple-600/20',
+    border: 'border-purple-500/30',
     features: [
       'Everything in Premium',
       '2-stage paint correction',
@@ -59,15 +59,22 @@ export function ServicesSticky() {
     offset: ['start end', 'end start']
   })
 
-  // Fade in the section title
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   const y = useTransform(scrollYProgress, [0, 0.2], [100, 0])
 
   return (
-    <section ref={containerRef} id="services" className="relative py-32 bg-void" style={{ minHeight: '200vh' }}>
+    <section ref={containerRef} id="services" className="relative py-32 bg-void" style={{ minHeight: '250vh' }}>
       <motion.div style={{ opacity, y }} className="sticky top-32 z-10 text-center max-w-4xl mx-auto mb-20 px-6">
+        <motion.span 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-block text-gold tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-4"
+        >
+          Our Packages
+        </motion.span>
         <h2 className="text-5xl md:text-7xl font-display text-text-primary mb-6 headline tracking-tighter">
-          Uncompromising <span className="text-primary italic">Packages</span>
+          Uncompromising <span className="text-gold italic">Packages</span>
         </h2>
         <p className="text-xl text-text-secondary font-light">
           Certified techniques. Microscopic precision. Scroll to explore our tiers.
@@ -77,33 +84,39 @@ export function ServicesSticky() {
       <div className="relative w-full max-w-5xl mx-auto px-6 pb-32">
         {packages.map((pkg, index) => {
           const Icon = pkg.icon
-          // Calculate dynamic sticky top based on index to create stack
-          const stickyTop = `calc(25vh + ${index * 40}px)`
+          const stickyTop = `calc(28vh + ${index * 50}px)`
           
           return (
-            <div 
+            <motion.div 
               key={index}
-              className="sticky pt-8 w-full"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="sticky pt-12 w-full"
               style={{ top: stickyTop }}
             >
               <div 
-                className={`relative overflow-hidden w-full rounded-3xl border ${pkg.border} ${pkg.color} p-8 md:p-12 shadow-2xl origin-top transition-all duration-500`}
+                className={`relative overflow-hidden w-full rounded-3xl border ${pkg.border} bg-gradient-to-br ${pkg.color} p-8 md:p-12 backdrop-blur-xl shadow-2xl origin-top transition-all duration-500`}
                 style={{ 
-                  boxShadow: '0 -20px 40px rgba(0,0,0,0.5)',
+                  boxShadow: '0 -20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
                 }}
               >
+                {/* Glow Effect */}
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
+                
                 {pkg.popular && (
-                  <div className="absolute top-0 right-0 bg-primary text-void px-6 py-2 rounded-bl-3xl font-bold uppercase tracking-widest text-xs z-10">
+                  <div className="absolute top-0 right-0 bg-gradient-to-l from-gold to-amber-500 text-void px-6 py-2.5 rounded-bl-3xl font-bold uppercase tracking-widest text-xs z-10 shadow-lg">
                     Most Popular
                   </div>
                 )}
                 
                 {/* Large Background Watermark Icon */}
-                <Icon className="absolute -bottom-10 -right-10 w-96 h-96 text-text-primary/[0.02] pointer-events-none" />
+                <Icon className="absolute -bottom-16 -right-16 w-[300px] h-[300px] text-white/[0.02] pointer-events-none" />
 
-                <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                   <div>
-                    <div className="w-16 h-16 rounded-2xl bg-text-primary/5 border border-text-primary/10 flex items-center justify-center mb-8 text-primary">
+                    <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 text-gold">
                       <Icon size={32} />
                     </div>
                     <h3 className="text-4xl font-display text-text-primary mb-4">{pkg.title}</h3>
@@ -115,24 +128,36 @@ export function ServicesSticky() {
                       <span className="text-text-tertiary uppercase tracking-widest text-sm mb-2">/ vehicle</span>
                     </div>
                     <Link href={`/booking?package=${pkg.title}`}>
-                      <Button variant={pkg.popular ? "premium" : "outline"} size="lg" className="w-full sm:w-auto h-14 px-8 text-base">
+                      <Button 
+                        variant={pkg.popular ? "premium" : "outline"} 
+                        size="lg" 
+                        className="w-full sm:w-auto h-14 px-8 text-base group"
+                      >
                         Select {pkg.title}
+                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
                   </div>
                   
-                  <div className="flex flex-col justify-center space-y-6">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-text-primary/50 mb-2">Includes</h4>
+                  <div className="flex flex-col justify-center space-y-5">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-text-primary/40 mb-2">Includes</h4>
                     {pkg.features.map((feature, fIdx) => (
-                      <div key={fIdx} className="flex items-start gap-4">
-                        <CheckCircle2 size={24} className="text-primary shrink-0 bg-primary/10 rounded-full p-1" />
+                      <motion.div 
+                        key={fIdx}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: fIdx * 0.1 }}
+                        className="flex items-start gap-4"
+                      >
+                        <CheckCircle2 size={22} className="text-gold shrink-0 bg-gold/10 rounded-full p-0.5" />
                         <span className="text-lg text-text-primary font-light">{feature}</span>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )
         })}
       </div>

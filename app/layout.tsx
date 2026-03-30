@@ -4,6 +4,9 @@ import './globals.css'
 import { CustomCursor } from '@/components/layout/custom-cursor'
 import { cn } from '@/lib/utils'
 import { Providers } from '@/components/providers'
+import { ScrollProgress } from '@/components/layout/scroll-progress'
+import { FloatingCTA } from '@/components/layout/floating-cta'
+import { AIChatWidget } from '@/components/layout/ai-chat-widget'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -35,6 +38,7 @@ export const metadata: Metadata = {
     default: 'Premium Car Wash & Detailing | LuxeWash',
   },
   description: 'A cinematic, ultra-premium digital experience for car washing & detailing services. We come to you.',
+  metadataBase: new URL('https://luxewash.com'),
   openGraph: {
     title: 'Premium Car Wash & Detailing | LuxeWash',
     description: 'We come to you. Book your premium detailing session today.',
@@ -56,7 +60,10 @@ export default function RootLayout({
         <div className="grain" />
         <Providers>
           <CustomCursor />
+          <ScrollProgress />
           {children}
+          <FloatingCTA />
+          <AIChatWidget />
         </Providers>
       </body>
     </html>
