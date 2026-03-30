@@ -53,7 +53,7 @@ export default async function BookingsPage() {
         <div className="bg-obsidian border border-white/5 p-12 text-center rounded-sm">
           <CalendarCheck className="w-12 h-12 text-text-tertiary mx-auto mb-4" />
           <h3 className="text-xl font-medium text-white mb-2">No Service History</h3>
-          <p className="text-text-secondary mb-6">You haven't booked any mobile details yet.</p>
+          <p className="text-text-secondary mb-6">You haven&apos;t booked any mobile details yet.</p>
           <Link href="/booking" className="inline-block bg-white text-void font-semibold py-2 px-6 hover:bg-gold transition-colors">
             Book Now
           </Link>

@@ -2,16 +2,11 @@
 
 import { useTheme } from 'next-themes'
 import { Sun, Moon } from 'lucide-react'
-import { useEffect, useState } from 'react'
-
+import { useMounted } from '@/hooks/use-mounted'
+ 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  // Avoid hydration mismatch by waiting for mount
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useMounted()
 
   if (!mounted) {
     return (

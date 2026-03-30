@@ -5,8 +5,8 @@ import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 export function SvgDraw({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  const svgRef = useRef<SVGSVGElement>(null)
-
+  const svgRef = useRef<HTMLDivElement>(null)
+ 
   useGSAP(
     () => {
       if (!svgRef.current) return
@@ -37,11 +37,11 @@ export function SvgDraw({ children, className = '' }: { children: React.ReactNod
     },
     { scope: svgRef }
   )
-
+ 
   return (
     <div className={className}>
       {/* Assuming children is an <svg> element */}
-      <div ref={svgRef as any}>{children}</div>
+      <div ref={svgRef}>{children}</div>
     </div>
   )
 }

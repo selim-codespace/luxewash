@@ -9,11 +9,9 @@ import { useEffect, useState } from 'react'
 
 export function StepConfirmation() {
   const { date, timeSlot, address, reset } = useBookingStore()
-  const [refId, setRefId] = useState('')
-
+  const [refId] = useState(() => 'LW-' + Math.random().toString(36).substring(2, 8).toUpperCase())
+ 
   useEffect(() => {
-    // Generate random booking ID
-    setRefId('LW-' + Math.random().toString(36).substr(2, 6).toUpperCase())
     window.scrollTo({ top: 0, behavior: 'smooth' })
     
     // Do not reset store immediately so they can see the confirmation details

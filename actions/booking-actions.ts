@@ -106,9 +106,17 @@ export async function createBookingIntent(data: {
   }
 }
 
+interface BookingData {
+  carId: string;
+  address: string;
+  locationLat?: number;
+  locationLng?: number;
+  instructions?: string;
+}
+
 export async function confirmBookingInDB(
   paymentIntentId: string, 
-  bookingData: any
+  bookingData: BookingData
 ) {
   try {
     const pi = await stripe.paymentIntents.retrieve(paymentIntentId)
@@ -119,7 +127,7 @@ export async function confirmBookingInDB(
 
     const booking = await db.booking.create({
       data: {
-        userId: pi.metadata.customerId,
+        userId: pi.metadata.customerId!,
         carId: bookingData.carId,
         scheduledAt: new Date(`${pi.metadata.scheduledDate}T${pi.metadata.scheduledTime}:00`),
         totalPrice: pi.amount / 100,
@@ -131,7 +139,7 @@ export async function confirmBookingInDB(
         notes: bookingData.instructions,
         services: {
           create: {
-            serviceId: pi.metadata.serviceId,
+            serviceId: pi.metadata.serviceId!,
             price: pi.amount / 100,
             quantity: 1
           }

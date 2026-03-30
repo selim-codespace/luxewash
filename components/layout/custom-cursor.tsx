@@ -3,26 +3,28 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { useMounted } from '@/hooks/use-mounted'
 
 export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
   const circleRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLSpanElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [isHoveringLink, setIsHoveringLink] = useState(false)
   const [hoverLabel, setHoverLabel] = useState<string | null>(null)
+  const mounted = useMounted()
 
   useGSAP(
     () => {
-      // Don't run on touch devices
-      if (typeof window !== 'undefined' && 'ontouchstart' in window) return
+      if (!mounted) return
+
+      const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
+      if (isTouchDevice) return
 
       let mouseX = 0
       let mouseY = 0
       let circleX = 0
       let circleY = 0
 
-      // Hide cursor by default, show on first mousemove
       gsap.set([dotRef.current, circleRef.current], { autoAlpha: 0 })
 
       const onMouseMove = (e: MouseEvent) => {
@@ -33,16 +35,12 @@ export function CustomCursor() {
         
         mouseX = e.clientX
         mouseY = e.clientY
-
-        // Move dot instantly
         gsap.set(dotRef.current, { x: mouseX, y: mouseY })
       }
 
-      // Smooth follow for the circle
       const followLoop = () => {
         circleX += (mouseX - circleX) * 0.15
         circleY += (mouseY - circleY) * 0.15
-        
         gsap.set(circleRef.current, { x: circleX, y: circleY })
         requestAnimationFrame(followLoop)
       }
@@ -56,21 +54,17 @@ export function CustomCursor() {
       document.addEventListener('mouseleave', onMouseLeave)
       document.addEventListener('mouseenter', onMouseEnter)
 
-      // Hover states for links and buttons
       const handleLinkHover = () => {
-        setIsHoveringLink(true)
         gsap.to(circleRef.current, { scale: 1.5, backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'transparent', duration: 0.3 })
         gsap.to(dotRef.current, { scale: 0, duration: 0.3 })
       }
-
+ 
       const handleLinkLeave = () => {
-        setIsHoveringLink(false)
         setHoverLabel(null)
         gsap.to(circleRef.current, { scale: 1, backgroundColor: 'transparent', borderColor: 'rgba(201, 168, 76, 0.5)', duration: 0.3 })
         gsap.to(dotRef.current, { scale: 1, duration: 0.3 })
       }
 
-      // Interactive areas (DRAG, VIEW)
       const handleDragHover = () => {
         handleLinkHover()
         setHoverLabel('DRAG')
@@ -103,16 +97,18 @@ export function CustomCursor() {
         })
       }
     },
-    { dependencies: [] } // Run once
+    { dependencies: [mounted] }
   )
 
-  // Disable native cursor via global class
   useEffect(() => {
+    if (!mounted) return
     if (typeof window !== 'undefined' && !('ontouchstart' in window)) {
       document.body.classList.add('cursor-none')
       return () => document.body.classList.remove('cursor-none')
     }
-  }, [])
+  }, [mounted])
+
+  if (!mounted) return null
 
   return (
     <>

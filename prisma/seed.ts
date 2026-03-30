@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -25,7 +25,7 @@ async function main() {
   console.log('Creating users...')
   const adminPassword = await hash('Admin123!', 10)
   
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: 'admin@luxewash.com',
       name: 'LuxeWash Admin',
@@ -36,7 +36,7 @@ async function main() {
 
   // 3. Create Services
   console.log('Creating services...')
-  const exteriorWash = await prisma.service.create({
+  await prisma.service.create({
     data: {
       name: 'Signature Exterior Wash',
       slug: 'signature-exterior',
@@ -55,7 +55,7 @@ async function main() {
     },
   })
 
-  const fullDetail = await prisma.service.create({
+  await prisma.service.create({
     data: {
       name: 'The Luxe Detail',
       slug: 'luxe-detail',

@@ -44,7 +44,7 @@ export function FeaturesSection() {
             </FadeIn>
             <FadeIn delay={0.1}>
               <p className="text-text-secondary text-lg leading-relaxed">
-                We've eliminated the friction of the traditional car wash. No more waiting lines, harsh spinning brushes, or subpar service. LuxeWash is a concierge-level detailing experience engineered for those who demand perfection.
+                We&apos;ve eliminated the friction of the traditional car wash. No more waiting lines, harsh spinning brushes, or subpar service. LuxeWash is a concierge-level detailing experience engineered for those who demand perfection.
               </p>
             </FadeIn>
             

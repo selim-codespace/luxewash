@@ -5,9 +5,6 @@ import { RevealText } from '@/components/animations/reveal-text'
 import { FadeIn } from '@/components/animations/fade-in'
 import { PricingPreview } from '@/components/sections/home/pricing-preview'
 import { FaqSection } from '@/components/sections/home/faq-section'
-import { Button } from '@/components/ui/button'
-import { Check, Info } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 export default function PricingPage() {

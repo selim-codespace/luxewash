@@ -1,6 +1,5 @@
 import { ScrollGallery } from '@/components/animations/scroll-gallery'
 import { RevealText } from '@/components/animations/reveal-text'
-import { FadeIn } from '@/components/animations/fade-in'
 import { MagneticButton } from '@/components/animations/magnetic-button'
 import Link from 'next/link'
 import { formatPrice } from '@/lib/utils'

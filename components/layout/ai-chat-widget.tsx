@@ -19,6 +19,10 @@ const quickActions = [
 ]
 
 export function AIChatWidget() {
+  const [mounted, setMounted] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return true
+  })
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -44,18 +48,18 @@ export function AIChatWidget() {
     if (!messageText.trim()) return
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       role: 'user',
       content: messageText
     }
-
+ 
     setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
-
+ 
     // Simulate AI response
     await new Promise(resolve => setTimeout(resolve, 1500))
-
+ 
     let responseContent = ""
     
     if (messageText.toLowerCase().includes('book')) {
@@ -69,9 +73,9 @@ export function AIChatWidget() {
     } else {
       responseContent = "Thank you for your question! I can help with booking, pricing, service recommendations, and more. You can also call us at 1-800-LUXE-WASH for immediate assistance. What else would you like to know?"
     }
-
+ 
     const assistantMessage: Message = {
-      id: (Date.now() + 1).toString(),
+      id: crypto.randomUUID(),
       role: 'assistant',
       content: responseContent
     }
@@ -79,6 +83,8 @@ export function AIChatWidget() {
     setMessages(prev => [...prev, assistantMessage])
     setIsLoading(false)
   }
+
+  if (!mounted) return null
 
   return (
     <>

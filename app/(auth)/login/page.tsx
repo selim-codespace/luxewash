@@ -41,7 +41,7 @@ function LoginForm() {
         router.push(callbackUrl)
         router.refresh()
       }
-    } catch (err: unknown) {
+    } catch {
       addToast({ title: 'Authentication Failed', description: 'An unexpected error occurred', type: 'error' })
     } finally {
       setIsLoading(false)
@@ -107,7 +107,7 @@ function LoginForm() {
       </button>
 
       <p className="text-center text-sm text-text-secondary pt-4">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link href="/register" className="text-gold hover:text-white transition-colors underline underline-offset-4">
           Create an account
         </Link>

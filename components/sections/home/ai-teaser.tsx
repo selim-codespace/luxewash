@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { RevealText } from '@/components/animations/reveal-text'
 import { FadeIn } from '@/components/animations/fade-in'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Sparkles } from 'lucide-react'
 
@@ -36,7 +35,7 @@ export function AiTeaser() {
           </RevealText>
           <FadeIn direction="up" delay={0.2}>
             <p className="text-text-secondary text-lg mb-8">
-              Let our AI Concierge analyze your vehicle's condition and recommend the perfect detailing package.
+              Let our AI Concierge analyze your vehicle&apos;s condition and recommend the perfect detailing package.
             </p>
           </FadeIn>
         </div>

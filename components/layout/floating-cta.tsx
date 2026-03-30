@@ -4,19 +4,21 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
-
+import { useMounted } from '@/hooks/use-mounted'
+ 
 export function FloatingCTA() {
+  const mounted = useMounted()
   const [isVisible, setIsVisible] = useState(false)
-
+ 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling past hero (500px)
       setIsVisible(window.scrollY > 500)
     }
-
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  if (!mounted) return null
 
   return (
     <AnimatePresence>

@@ -48,7 +48,7 @@ export function ServiceDetailCard({ service }: { service: Service }) {
         <div className="h-px border-t border-white/5 mb-8" />
 
         <div className="mb-10 flex-1">
-          <h4 className="text-sm font-medium text-white mb-4 uppercase tracking-widest">What's Included</h4>
+          <h4 className="text-sm font-medium text-white mb-4 uppercase tracking-widest">What&apos;s Included</h4>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6">
             {service.features.map((feature, idx) => (
               <li key={idx} className="flex items-start gap-3">

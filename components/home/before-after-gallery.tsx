@@ -41,7 +41,7 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
   const [sliderPosition, setSliderPosition] = useState(50)
   const containerRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
-
+ 
   const handleMove = (clientX: number) => {
     if (!containerRef.current || !isDragging.current) return
     
@@ -50,11 +50,11 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
     setSliderPosition(percentage)
   }
-
+ 
   const handleTouchMove = (e: React.TouchEvent) => {
     handleMove(e.touches[0].clientX)
   }
-
+ 
   return (
     <div
       ref={containerRef}
@@ -67,23 +67,29 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
       onTouchEnd={() => (isDragging.current = false)}
       onTouchMove={handleTouchMove}
     >
-      <div className="absolute inset-0 bg-graphite">
-        <div className="absolute inset-0 flex items-center justify-center text-text-tertiary">
-          <span className="text-sm">Before image</span>
-        </div>
+      <div className="absolute inset-0">
+        <Image 
+          src={before} 
+          alt="Before detailing" 
+          fill 
+          className="object-cover" 
+        />
       </div>
       
       <div
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${(100 - sliderPosition)}% 0 0)` }}
       >
-        <div className="absolute inset-0 bg-obsidian">
-          <div className="absolute inset-0 flex items-center justify-center text-text-primary">
-            <span className="text-sm">After image</span>
-          </div>
+        <div className="absolute inset-0">
+          <Image 
+            src={after} 
+            alt="After detailing" 
+            fill 
+            className="object-cover" 
+          />
         </div>
       </div>
-
+ 
       <div
         className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize"
         style={{ left: `${sliderPosition}%` }}
@@ -93,7 +99,7 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
           <ChevronRight className="w-4 h-4 text-void -ml-1" />
         </div>
       </div>
-
+ 
       <div className="absolute bottom-4 left-4 px-2 py-1 bg-void/80 backdrop-blur-sm rounded text-xs text-text-primary uppercase tracking-widest">
         Before
       </div>

@@ -15,7 +15,7 @@ export const redis = new Redis(getRedisUrl(), {
  * Attempt to lock a booking slot in Redis.
  * Used to temporarily reserve a slot while payment is processed.
  */
-export async function lockSlot(slotKey: string, payload: any, ttlSeconds: number = 600) {
+export async function lockSlot(slotKey: string, payload: unknown, ttlSeconds: number = 600) {
   const result = await redis.set(
     `lock:slot:${slotKey}`,
     JSON.stringify(payload),

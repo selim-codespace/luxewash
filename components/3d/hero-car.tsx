@@ -23,8 +23,10 @@ export function HeroCar() {
     try {
       const canvas = document.createElement('canvas')
       const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (!gl) setIsWebGLSupported(false)
-    } catch (e) {
+    } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsWebGLSupported(false)
     }
   }, [])

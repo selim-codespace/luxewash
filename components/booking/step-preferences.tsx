@@ -6,7 +6,6 @@ import { FadeIn } from '@/components/animations/fade-in'
 import { Button } from '@/components/ui/button'
 import { Upload, Info, X, Camera } from 'lucide-react'
 import Image from 'next/image'
-import { cn } from '@/lib/utils'
 
 export function StepPreferences() {
   const { instructions, setInstructions, nextStep } = useBookingStore()

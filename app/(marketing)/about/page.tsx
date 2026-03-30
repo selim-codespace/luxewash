@@ -26,7 +26,7 @@ export default function AboutPage() {
           </RevealText>
           <FadeIn delay={0.8} direction="up">
             <p className="text-xl text-text-secondary leading-relaxed">
-              We started LuxeWash because we were tired of the "good enough" culture in car care. We believe your vehicle deserves the meticulously curated experience of a high-end studio, but on your terms, at your location.
+              We started LuxeWash because we were tired of the &quot;good enough&quot; culture in car care. We believe your vehicle deserves the meticulously curated experience of a high-end studio, but on your terms, at your location.
             </p>
           </FadeIn>
         </div>
@@ -49,7 +49,7 @@ export default function AboutPage() {
             </RevealText>
             <FadeIn delay={0.2}>
               <p className="text-text-secondary leading-relaxed mb-6">
-                Car washing is a commodity. Auto detailing is a craft. At LuxeWash, we treat every vehicle like a bespoke project. We don't use harsh generic acids or abrasive brushes. We use pH-neutral foams, multi-bucket safe wash methods, and boutique European sealants.
+                Car washing is a commodity. Auto detailing is a craft. At LuxeWash, we treat every vehicle like a bespoke project. We don&apos;t use harsh generic acids or abrasive brushes. We use pH-neutral foams, multi-bucket safe wash methods, and boutique European sealants.
               </p>
               <p className="text-text-secondary leading-relaxed mb-8">
                 Our technicians endure a rigorous 6-week masterclass. They understand clearcoat hardness, the nuances of Merino leathers, and the chemistry behind ceramic bonding. When we touch your car, we are preserving a piece of engineering art.
@@ -82,7 +82,7 @@ export default function AboutPage() {
             <FadeIn delay={0.2} className="bg-obsidian border border-white/5 p-8 hover:border-gold/30 transition-colors">
               <Shield className="w-8 h-8 text-gold mb-6" />
               <h4 className="text-xl font-medium text-white mb-3">Total Protection</h4>
-              <p className="text-text-secondary text-sm leading-relaxed">We don't just clean; we protect. Our ceramic technologies ensure your investment is shielded from UV rays, harsh chemicals, and road debris.</p>
+              <p className="text-text-secondary text-sm leading-relaxed">We don&apos;t just clean; we protect. Our ceramic technologies ensure your investment is shielded from UV rays, harsh chemicals, and road debris.</p>
             </FadeIn>
             <FadeIn delay={0.4} className="bg-obsidian border border-white/5 p-8 hover:border-gold/30 transition-colors">
               <Award className="w-8 h-8 text-gold mb-6" />

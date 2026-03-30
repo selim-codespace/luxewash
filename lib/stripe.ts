@@ -5,6 +5,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apiVersion: "2026-03-25.dahlia" as any,
   appInfo: { name: 'LuxeWash', version: '1.0.0' },
 })

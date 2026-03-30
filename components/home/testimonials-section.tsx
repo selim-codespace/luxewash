@@ -1,10 +1,9 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/animations/fade-in'
 import { Quote, Star, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
 
 const testimonials = [
   {
@@ -40,15 +39,7 @@ const testimonials = [
 ]
 
 export function TestimonialsSection() {
-  const containerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef as React.RefObject<HTMLElement>,
-    offset: ['start end', 'end start'],
-  })
-
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
 
   const next = () => setActiveIndex((prev) => (prev + 1) % testimonials.length)
   const prev = () => setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
@@ -61,7 +52,7 @@ export function TestimonialsSection() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
       </div>
 
-      <motion.div style={{ opacity }} className="container mx-auto px-6 lg:px-12 relative z-10">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         
         <div className="text-center max-w-3xl mx-auto mb-20">
           <FadeIn>
@@ -76,7 +67,7 @@ export function TestimonialsSection() {
           </FadeIn>
           <FadeIn delay={0.2}>
             <p className="text-text-secondary text-lg leading-relaxed">
-              Don't just take our word for it. Read what our exclusive clientele has to say about the LuxeWash experience.
+              Don&apos;t just take our word for it. Read what our exclusive clientele has to say about the LuxeWash experience.
             </p>
           </FadeIn>
         </div>
@@ -109,7 +100,7 @@ export function TestimonialsSection() {
                 <Quote className="w-12 h-12 text-gold/30 mb-6" />
                 
                 <p className="text-xl md:text-2xl text-text-primary leading-relaxed mb-8 font-light italic">
-                  "{testimonials[activeIndex].quote}"
+                  &quot;{testimonials[activeIndex].quote}&quot;
                 </p>
                 
                 <div className="flex items-center justify-between">
@@ -158,7 +149,7 @@ export function TestimonialsSection() {
             </div>
           </div>
         </FadeIn>
-      </motion.div>
+      </div>
       
       {/* Large decorative watermark */}
       <div className="absolute -bottom-20 -right-20 text-[400px] font-display font-bold text-white/[0.015] pointer-events-none select-none leading-none">

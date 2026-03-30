@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
+import { Environment, Float } from '@react-three/drei'
 import { Suspense, useRef, useState, useEffect } from 'react'
 import * as THREE from 'three'
 
@@ -36,7 +36,7 @@ function CursorFollower() {
   const { viewport } = useThree()
   const rigRef = useRef<THREE.Group>(null)
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (rigRef.current) {
       // Smoothly look at cursor
       const targetX = (state.pointer.x * viewport.width) / 4
@@ -60,6 +60,7 @@ export function HeroCarScene() {
 
   useEffect(() => {
     // Limit pixel ratio for performance
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDpr(Math.min(window.devicePixelRatio, 2))
   }, [])
 

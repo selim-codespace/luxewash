@@ -30,7 +30,7 @@ interface BookingState {
   prevStep: () => void
   setService: (id: string, basePrice: number) => void
   toggleAddon: (addon: Addon) => void
-  setVehicle: (size: 'SEDAN' | 'SUV' | 'TRUCK', details?: any) => void
+  setVehicle: (size: 'SEDAN' | 'SUV' | 'TRUCK', details?: { make: string; model: string; year: string; plate: string }) => void
   setSchedule: (date: Date, timeSlot: string) => void
   setLocation: (address: string, lat?: number, lng?: number) => void
   setInstructions: (text: string) => void

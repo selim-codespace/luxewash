@@ -20,7 +20,7 @@ export default function HowItWorksPage() {
         <FadeIn delay={0.2} direction="up">
           <p className="text-xl text-text-secondary leading-relaxed max-w-2xl mx-auto">
             From the moment you book to the moment we hand back your keys, 
-            every step is engineered for your convenience and your vehicle's perfection.
+            every step is engineered for your convenience and your vehicle&apos;s perfection.
           </p>
         </FadeIn>
       </div>

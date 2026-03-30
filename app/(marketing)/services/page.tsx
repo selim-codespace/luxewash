@@ -76,7 +76,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <CompareModal services={services} />
+      <CompareModal />
     </div>
   )
 }

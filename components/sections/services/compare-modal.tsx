@@ -17,7 +17,7 @@ const matrix = [
   { feature: 'Machine Polish (1-step)', t1: false, t2: false, t3: true },
 ]
 
-export function CompareModal({ services }: { services: any[] }) {
+export function CompareModal() {
   const [isOpen, setIsOpen] = useState(false)
 
   // Listen for the custom event dispatched from detail cards

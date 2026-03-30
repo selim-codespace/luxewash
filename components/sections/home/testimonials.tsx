@@ -1,7 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { useState } from 'react'
 import { RevealText } from '@/components/animations/reveal-text'
 import { FadeIn } from '@/components/animations/fade-in'
 import { Star } from 'lucide-react'
@@ -47,7 +46,7 @@ export function Testimonials() {
               </div>
               
               <p className="text-2xl md:text-4xl font-display text-white leading-relaxed mb-8 max-w-4xl">
-                "{testimonials[activeIndex].text}"
+                &quot;{testimonials[activeIndex].text}&quot;
               </p>
               
               <div>

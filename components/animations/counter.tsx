@@ -1,8 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
-import { useGSAP } from '@gsap/react'
-import { gsap } from 'gsap'
+import { useRef, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface CounterProps {
@@ -21,28 +19,46 @@ export function Counter({
   className = '',
 }: CounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
+  const [hasStarted, setHasStarted] = useState(false)
 
-  useGSAP(
-    () => {
-      const obj = { val: 0 }
-      gsap.to(obj, {
-        val: value,
-        duration: duration,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: ref.current,
-          start: 'top 90%',
-        },
-        onUpdate: () => {
-          if (ref.current) {
-            // Using Intl.NumberFormat to add commas
-            ref.current.innerText = Math.floor(obj.val).toLocaleString()
-          }
-        },
-      })
-    },
-    { scope: ref }
-  )
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasStarted) {
+          setHasStarted(true)
+        }
+      },
+      { threshold: 0.9 }
+    )
+
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+
+    return () => observer.disconnect()
+  }, [hasStarted])
+
+  useEffect(() => {
+    if (!hasStarted || !ref.current) return
+
+    let startTime: number | null = null
+    const startValue = 0
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1)
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+      const current = startValue + (value - startValue) * easeOut
+      
+      ref.current!.innerText = Math.floor(current).toLocaleString()
+
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      }
+    }
+
+    requestAnimationFrame(animate)
+  }, [hasStarted, value, duration])
 
   return (
     <div className={cn('inline-flex items-baseline font-mono font-medium', className)}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { RevealText } from '@/components/animations/reveal-text'
 import { FadeIn } from '@/components/animations/fade-in'
 import { GripVertical } from 'lucide-react'
